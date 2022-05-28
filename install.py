@@ -4,15 +4,12 @@ import platform
 from dataclasses import dataclass
 
 def get_os_name():
-    match platform.version().lower():
-        case 'ubuntu':
-            return 'ubuntu'
-        case 'debian':
-            return 'debian'
-        case 'fedora': 
-            return 'fedora'
-        case 'centos':
-            return 'centos'
+    v = platform.version().lower()
+    if 'darwin' in v: return 'brew'
+    if 'ubuntu' in v: return 'ubuntu'
+    if 'debian' in v: return 'debian'
+    if 'fedora' in v: return 'fedora'
+    if 'centos' in v: return 'centos'
 
 def get_default_package_manager(os_name):
     match os_name:
@@ -38,7 +35,7 @@ class Install:
         self.web_manager = 'curl'
         os.system(f"""
             sudo {self.package_manager} update
-            sudo {self.package_manager} install -y curl
+            sudo {self.package_manager} install -y curl git
         """)
 
     def zsh(self):
@@ -76,13 +73,13 @@ install = Install()
 
 @dataclass
 class Config:
-    INSTALL_ZSH=install.zsh
-    INSTALL_OH_MY_ZSH=install.oh_my_zsh
-    INSTALL_DEFAULT_ZSH_PLUGINS=install.default_zsh_plugins
-    INSTALL_HACK_NERDFONTS=install.hack_nerdfonts # fonts
-    INSTALL_COLOR_LS=install.color_ls
-    INSTALL_TMUX=install.tmux
-    INSTALL_NEOVIM=install.neovim # nvim
+    _1_INSTALL_ZSH=install.zsh
+    _2_INSTALL_OH_MY_ZSH=install.oh_my_zsh
+    _3_INSTALL_DEFAULT_ZSH_PLUGINS=install.default_zsh_plugins
+    _4_INSTALL_HACK_NERDFONTS=install.hack_nerdfonts # fonts
+    _5_INSTALL_COLOR_LS=install.color_ls
+    _6_INSTALL_TMUX=install.tmux
+    _7_INSTALL_NEOVIM=install.neovim # nvim
 
     def list_attrs__(self) -> list:
         return [attr for attr in sorted(dir(Config)) if '__' not in attr]
